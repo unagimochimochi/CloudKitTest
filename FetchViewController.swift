@@ -28,11 +28,13 @@ class FetchViewController: UIViewController {
         
         let recordID = CKRecord.ID(recordName: itemID)
         
-        publicDatabase.fetch(withRecordID: recordID) { (obtainedRecord, error) in
-            if let accountID = obtainedRecord?.value(forKey: "accountID") as? String,
-                let accountName = obtainedRecord?.value(forKey: "accountName") as? String {
-                print("ID: \(accountID), Name: \(accountName)")
-            }
+        publicDatabase.fetch(withRecordID: recordID, completionHandler: fetchCompHandler(record:error:))
+    }
+    
+    // fetch(withRecordID:completionHandler:)の第2引数
+    func fetchCompHandler(record: CKRecord?, error: Error?) -> Void {
+        if let id = record?.value(forKey: "accountID") as? String, let name = record?.value(forKey: "accountName") as? String {
+            print("ID: \(id), Name: \(name)")
         }
     }
 
