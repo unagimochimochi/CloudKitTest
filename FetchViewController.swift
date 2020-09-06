@@ -9,15 +9,36 @@
 import UIKit
 import CloudKit
 
-class FetchViewController: UIViewController {
+class FetchViewController: UIViewController, UITextFieldDelegate {
+    
+    var textFieldID: String?
+    
+    var fetchedID: String?
+    var fetchedName: String?
 
+    @IBOutlet weak var textField: UITextField!
+    
+    @IBOutlet weak var idLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        textField.delegate = self
     }
     
-    @IBAction func tappedButton(_ sender: Any) {
-        fetchItem(itemID: "6597E33C-666C-942B-0910-2B11D402C11F")
+    @IBAction func fetch(_ sender: Any) {
+        if let textFieldId = textFieldID {
+            fetchItem(itemID: "accountID-\(textFieldId)")
+        }
+    }
+    
+    @IBAction func display(_ sender: Any) {
+        if let id = fetchedID, let name = fetchedName {
+            idLabel.text = "ID: \(id)"
+            nameLabel.text = "Name: \(name)"
+        }
     }
     
     func fetchItem(itemID: String) {
@@ -35,7 +56,18 @@ class FetchViewController: UIViewController {
     func fetchCompHandler(record: CKRecord?, error: Error?) -> Void {
         if let id = record?.value(forKey: "accountID") as? String, let name = record?.value(forKey: "accountName") as? String {
             print("ID: \(id), Name: \(name)")
+            fetchedID = id
+            fetchedName = name
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // キーボードをとじる
+        textField.endEditing(true)
+        
+        textFieldID = textField.text
+        
+        return true
     }
 
 }
