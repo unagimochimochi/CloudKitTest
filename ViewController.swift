@@ -27,6 +27,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         doneButton.isEnabled = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        let userDefaults = UserDefaults.standard
+        let firstLaunchKey = "firstLaunch"
+        
+        if userDefaults.bool(forKey: firstLaunchKey) {
+            userDefaults.set(false, forKey: firstLaunchKey)
+            userDefaults.synchronize()
+            
+            self.performSegue(withIdentifier: "toFirstVC", sender: nil)
+        }
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // キーボードをとじる
         textField.endEditing(true)
