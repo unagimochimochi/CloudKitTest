@@ -70,6 +70,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
             accountVC.id = self.id
             accountVC.name = self.name
         }
+        
+        else if identifier == "toMapVC" {
+            let mapVC = segue.destination as! MapViewController
+            mapVC.id = self.id
+        }
     }
 
 }
