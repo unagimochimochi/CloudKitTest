@@ -12,6 +12,10 @@ import CloudKit
 class FirstViewController: UIViewController, UITextFieldDelegate {
     
     var accountIDs = [String]()
+    
+    var id: String?
+    var name: String?
+    var password: String?
 
     @IBOutlet weak var idTextField: UITextField!
     @IBOutlet weak var idCautionLabel: UILabel!
@@ -58,11 +62,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
             else if text.count > 32 {
                 // 注意を表示
                 idCautionLabel.text = "32文字以下で入力してください"
-                idCautionLabel.isHidden = false
-                
-                done.remove(at: 0)
-                done.insert(false, at: 0)
-                doneButton.isEnabled = false
+                noGood(label: idCautionLabel, num: 0)
             }
             
             // 1〜32文字のとき
@@ -73,11 +73,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
                     if accountIDs.contains("accountID-\(text)") == true {
                         // 注意を表示
                         idCautionLabel.text = "そのIDはすでに登録されています"
-                        idCautionLabel.isHidden = false
-                        
-                        done.remove(at: 0)
-                        done.insert(false, at: 0)
-                        doneButton.isEnabled = false
+                        noGood(label: idCautionLabel, num: 0)
                     }
                     
                     // OK!
@@ -93,11 +89,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
                 else {
                     // 注意を表示
                     idCautionLabel.text = "使用できない文字が含まれています"
-                    idCautionLabel.isHidden = false
-                    
-                    done.remove(at: 0)
-                    done.insert(false, at: 0)
-                    doneButton.isEnabled = false
+                    noGood(label: idCautionLabel, num: 0)
                 }
             }
         }
@@ -128,22 +120,14 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
             if text.count < 8 {
                 // 注意を表示
                 pwCautionLabel.text = "8文字以上で入力してください"
-                pwCautionLabel.isHidden = false
-                
-                done.remove(at: 2)
-                done.insert(false, at: 2)
-                doneButton.isEnabled = false
+                noGood(label: pwCautionLabel, num: 2)
             }
             
             // 33文字以上のとき
             else if text.count > 32 {
                 // 注意を表示
                 pwCautionLabel.text = "32文字以下で入力してください"
-                pwCautionLabel.isHidden = false
-                
-                done.remove(at: 2)
-                done.insert(false, at: 2)
-                doneButton.isEnabled = false
+                noGood(label: pwCautionLabel, num: 2)
             }
             
             // 8〜32文字のとき
@@ -158,11 +142,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     // 注意を表示
                     pwCautionLabel.text = "使用できない文字が含まれています"
-                    pwCautionLabel.isHidden = false
-                    
-                    done.remove(at: 2)
-                    done.insert(false, at: 2)
-                    doneButton.isEnabled = false
+                    noGood(label: pwCautionLabel, num: 2)
                 }
             }
         }
@@ -198,6 +178,14 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // 警告を表示 & Doneボタンを無効にする
+    func noGood(label: UILabel, num: Int) {
+        label.isHidden = false
+        done.remove(at: num)
+        done.insert(false, at: num)
+        doneButton.isEnabled = false
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // キーボードをとじる
         textField.endEditing(true)
@@ -210,6 +198,11 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    // 入力中はDoneボタンを無効にする
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        doneButton.isEnabled = false
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         // キーボードをとじる
         textField.endEditing(true)
@@ -217,6 +210,21 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
         // ID、パスワードの入力条件をクリアしていればDoneボタンを有効にする
         if done.contains(false) == false {
             doneButton.isEnabled = true
+        }
+        
+        if textField == idTextField {
+            id = textField.text
+            print(id!)
+        }
+        
+        if textField == nameTextField {
+            name = textField.text
+            print(name!)
+        }
+        
+        if textField == pwTextField {
+            password = textField.text
+            print(password!)
         }
     }
     
