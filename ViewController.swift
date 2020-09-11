@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
     
@@ -38,6 +39,33 @@ class ViewController: UIViewController, UITextFieldDelegate {
             userDefaults.synchronize()
             
             self.performSegue(withIdentifier: "toFirstVC", sender: nil)
+        }
+    }
+    
+    @IBAction func unwindtoVC(sender: UIStoryboardSegue) {
+        if let firstVC = sender.source as? FirstViewController,
+            let id = firstVC.id,
+            let name = firstVC.name,
+            let password = firstVC.password {
+            
+            let recordID = CKRecord.ID(recordName: "accountID-\(id)")
+            let record = CKRecord(recordType: "Accounts", recordID: recordID)
+            
+            record["accountID"] = id as NSString
+            record["accountName"] = name as NSString
+            record["accountPassword"] = password as NSString
+            
+            // デフォルトコンテナ（iCloud.com.gmail.mokamokayuuyuu.AccountsTest）のパブリックデータベースにアクセス
+            let publicDatabase = CKContainer.default().publicCloudDatabase
+            
+            // レコードを保存
+            publicDatabase.save(record, completionHandler: {(record, error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                print("アカウント作成成功")
+            })
         }
     }
     

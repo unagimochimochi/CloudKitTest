@@ -151,7 +151,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     // ID入力文字列の判定
     func idTextFieldCharactersSet(_ textField: UITextField, _ text: String) -> Bool {
         // 入力できる文字
-        let characters = CharacterSet(charactersIn:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz_").inverted
+        let characters = CharacterSet(charactersIn:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_").inverted
         
         let components = text.components(separatedBy: characters)
         let filtered = components.joined(separator: "")
@@ -166,7 +166,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     // パスワード入力文字列の判定
     func pwTextFieldCharactersSet(_ textField: UITextField, _ text: String) -> Bool {
         // 入力できる文字
-        let characters = CharacterSet(charactersIn:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz").inverted
+        let characters = CharacterSet(charactersIn:"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").inverted
         
         let components = text.components(separatedBy: characters)
         let filtered = components.joined(separator: "")
@@ -250,6 +250,16 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
                 print(self.accountIDs)
             }
         })
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let button = sender as? UIBarButtonItem, button === self.doneButton else {
+            return
+        }
+        
+        id = idTextField.text!
+        name = nameTextField.text!
+        password = pwTextField.text!
     }
 
 }
