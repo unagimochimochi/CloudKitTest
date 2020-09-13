@@ -28,6 +28,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // 位置情報利用の許可を得る
         locManager.requestWhenInUseAuthorization()
+        // 位置情報の更新を指示
+        locManager.startUpdatingLocation()
 
         initMap()
         
@@ -44,6 +46,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // ユーザーを中心に地図を表示
         mapView.userTrackingMode = .follow
+    }
+    
+    // 位置情報更新時
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:[CLLocation]) {
+        print("位置情報更新")
+        
+        recordLocation()
     }
     
     func recordLocation() {
